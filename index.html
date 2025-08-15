@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Nightfall: Do You Dare?</title>
+	<link rel="preload" as="video" href="jellyousmp4.mp4" type="video/mp4" />
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<div id="app" class="stage">
+		<video id="bgVideo" class="bg-video" src="jellyousmp4.mp4" autoplay muted playsinline loop preload="metadata" aria-hidden="true"></video>
+
+		<canvas id="grainCanvas" class="grain" aria-hidden="true"></canvas>
+		<div class="overlay vignette" aria-hidden="true"></div>
+		<div class="overlay scanlines" aria-hidden="true"></div>
+		<div id="glitchBar" class="glitch-bar" aria-hidden="true"></div>
+		<div id="flash" class="flash" aria-hidden="true"></div>
+		<div id="tracking" class="tracking-lines" aria-hidden="true"></div>
+		<div id="scratches" class="scratches" aria-hidden="true"></div>
+		<div id="eyesLayer" class="eyes-layer" aria-hidden="true"></div>
+		<div id="deadPixels" class="dead-pixels" aria-hidden="true"></div>
+		<div id="demonLayer" class="demon-layer" aria-hidden="true"></div>
+		<div id="tears" class="tears" aria-hidden="true"></div>
+		<div id="drips" class="drips" aria-hidden="true"></div>
+		<div id="handsLayer" class="hands-layer" aria-hidden="true"></div>
+		<div id="jumpscare" class="jumpscare" aria-hidden="true"></div>
+	</div>
+
+	<div id="gate" class="gate visible">
+		<div class="gate-inner">
+			<h1>Do you dare to enter?</h1>
+			<p>Click Enter to begin. Turn on sound at your own risk.</p>
+			<button id="startBtn" class="btn">Enter</button>
+			<button id="speakBtn" class="btn btn-ghost">:)</button>
+			<p class="hint">Keyboard: M = Toggle sound, H = Toggle flicker</p>
+		</div>
+	</div>
+
+	<div id="omens" class="omens" aria-live="polite" aria-atomic="false"></div>
+
+	<!-- SVG filters for VHS distortion -->
+	<svg width="0" height="0" style="position:absolute">
+		<defs>
+			<filter id="vhsDistort">
+				<feTurbulence id="turb1" type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="3" result="noise" />
+				<feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" />
+			</filter>
+
+			<filter id="vhsDistortStrong">
+				<feTurbulence id="turb2" type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="6" result="noise2" />
+				<feDisplacementMap in="SourceGraphic" in2="noise2" scale="32" xChannelSelector="R" yChannelSelector="G" />
+			</filter>
+
+			<!-- Posterize/threshold-like effect -->
+			<filter id="posterize">
+				<feComponentTransfer>
+					<feFuncR type="discrete" tableValues="0 0.4 1" />
+					<feFuncG type="discrete" tableValues="0 0.35 1" />
+					<feFuncB type="discrete" tableValues="0 0.3 1" />
+				</feComponentTransfer>
+			</filter>
+
+			<!-- Ripple/warp effect -->
+			<filter id="rippleDistort">
+				<feTurbulence id="turbRipple" type="turbulence" baseFrequency="0.01 0.02" numOctaves="2" seed="13" result="rnoise" />
+				<feDisplacementMap in="SourceGraphic" in2="rnoise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+			</filter>
+
+			<!-- Edge detect -->
+			<filter id="edgeDetect">
+				<feConvolveMatrix order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" divisor="1" bias="0" />
+			</filter>
+
+			<!-- Demon face symbol (simple SVG) -->
+			<symbol id="demonFace" viewBox="0 0 100 100">
+				<rect x="0" y="0" width="100" height="100" fill="transparent" />
+				<g fill="#ffffff" stroke="#ffffff" stroke-width="1">
+					<!-- Horns -->
+					<path d="M18,22 C22,10 34,6 36,18 C31,18 26,20 18,22 Z"/>
+					<path d="M82,22 C78,10 66,6 64,18 C69,18 74,20 82,22 Z"/>
+					<!-- Eyes -->
+					<path d="M28,44 C36,38 44,38 48,44 C44,48 36,48 28,44 Z"/>
+					<path d="M72,44 C64,38 56,38 52,44 C56,48 64,48 72,44 Z"/>
+					<!-- Mouth -->
+					<path d="M30,68 C40,76 60,76 70,68 C62,72 38,72 30,68 Z" fill="#ffffff"/>
+					<!-- Teeth -->
+					<rect x="46" y="66" width="2" height="6" />
+					<rect x="52" y="66" width="2" height="6" />
+				</g>
+			</symbol>
+		</defs>
+	</svg>
+
+	<audio id="screamAudio" preload="auto">
+		<source src="smile.mp3" type="audio/mpeg" />
+		<source src="smile mp3.mp3" type="audio/mpeg" />
+		<source src="smile mp3" type="audio/mpeg" />
+		<source src="smile.mp3.mp4" type="audio/mp4" />
+	</audio>
+
+	<script src="script.js" defer></script>
+</body>
+</html>
+
